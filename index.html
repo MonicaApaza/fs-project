@@ -1,48 +1,18 @@
 <html lang="es">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Task Manager</title>
-    <style>
-        body{
-            font-family: Arial, Helvetica, sans-serif;
-            padding: 30px;
-            background-color: #f4f4f4;
-        }
-        h1{
-            color: #333;
-            margin-bottom: 20px;
-        }
-        input{
-            padding: 10px;
-            width: 250px;
-            font-size: 16px;
-        }
-        button{
-            padding: 10px 15px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        ul{
-            padding: 0;
-            margin-top: 20px;
-
-        }
-        li{
-            list-style:circle;
-            background-color: white;
-            padding: 10px;
-            margin-bottom: 8px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <h1>Task Manager</h1>
-    <input type="text" id="taskInput" placeholder="Escribe una nueva tarea">
+    <input type="text" id="taskInput" placeholder="Escribe una nueva tarea" />
     <button id="addTaskBtn">Agregar Tarea</button>
     <ul id="taskList">
       <li>Estudiar Javascript</li>
       <li>Estudiar SQL</li>
     </ul>
+    <script src="script.js"></script>
   </body>
 </html>
