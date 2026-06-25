@@ -48,7 +48,43 @@ li{
   padding: 14px 16px;
   margin-bottom: 12px;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 16px;
   color: #333;
   
+}
+
+.task-input{
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+input{
+  flex:1;
+  padding:10px 14px;
+  font-size: 18px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  
+  color:#333;
+  background-color: #f9f9f9;
+}
+
+input:focus{
+  border-color: #aaa;
+  background-color: #fff;
+}
+
+button{
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover{
+  background-color: #555;
 }
