@@ -4,9 +4,10 @@ import { Task } from "../TaskUtil";
 type TaskListProps = {
   tasks: Task[];
   onRemoveTask: (id: number) => void;
+  onMarkCompleted:(id:number, completed:boolean) =>void;
 };
 
-function TaskList({ tasks, onRemoveTask }: TaskListProps) {
+function TaskList({ tasks, onRemoveTask, onMarkCompleted }: TaskListProps) {
   return (
     <ul>
       {tasks.map((task) => {
@@ -18,6 +19,7 @@ function TaskList({ tasks, onRemoveTask }: TaskListProps) {
             text={text}
             completed={completed}
             onRemoveTask={onRemoveTask}
+            onMarkCompleted={onMarkCompleted}
           />
         );
       })}

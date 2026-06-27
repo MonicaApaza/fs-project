@@ -9,6 +9,7 @@ export type TaskProps = {
   text: string;
   completed: boolean;
   onRemoveTask: (id: number) => void;
+  onMarkCompleted:(id:number, completed:boolean) =>void;
 };
 
 export const maxId = (tasks: Task[]) => {

@@ -59,7 +59,7 @@ li{
   margin-bottom: 20px;
 }
 
-input{
+input[type="text"]{
   flex:1;
   padding:10px 14px;
   font-size: 18px;
@@ -92,4 +92,9 @@ button:hover{
 .task-card{
   display: flex;
   justify-content: space-between;
+  gap: 8px;
+}
+
+.task-card p{
+  flex: 1;
 }

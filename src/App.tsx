@@ -20,11 +20,19 @@ function App() {
     setTasks(tasks.filter(task=> task.id != id));
   }
 
+  const markCompleted = (id:number, completed:boolean) =>{
+    setTasks(tasks.map(task=> task.id === id? {...task, completed : completed}: task));
+  }
+
   return (
     <div className="app-container">
       <Header />
       <TaskInput onAddTask={addTask} />
-      <TaskList tasks={tasks} onRemoveTask={removeTask}/>
+      <TaskList
+        tasks={tasks}
+        onRemoveTask={removeTask}
+        onMarkCompleted={markCompleted}
+      />
     </div>
   );
 }
