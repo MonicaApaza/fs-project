@@ -1,0 +1,13 @@
+export type Task = {
+  id: number;
+  text: string;
+  completed: boolean;
+};
+
+export const maxId = (tasks: Task[]) => {
+  const maxId = tasks.reduce(
+    (max, task) => (task.id > max ? (max = task.id) : (max = max)),
+    0,
+  );
+  return maxId;
+};

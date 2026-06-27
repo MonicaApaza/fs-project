@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Header from "./components/Header";
 import TaskList from "./components/TaskList";
-import { Task } from "./Task";
+import { maxId, Task } from "./TaskUtil";
 import { TaskInput } from "./components/TaskInput";
 
 function App() {
@@ -12,7 +12,8 @@ function App() {
   ]);
 
   const addTask = (text:string)=>{
-   setTasks([...tasks, { id: tasks.length+1, text, completed: false }]);
+    const nextId = maxId(tasks)+1;
+    setTasks([...tasks, { id: nextId, text, completed: false }]);
   };
 
   return (
