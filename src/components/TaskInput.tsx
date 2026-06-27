@@ -5,26 +5,25 @@ type TaskInputProps = {
   onAddTask: (text: string) => void;
 };
 
-export const TaskInput = (props: TaskInputProps) => {
+export const TaskInput = ({ onAddTask }: TaskInputProps) => {
   const [text, settext] = useState("");
-  function handleSubmit(): void {
-    if (!text.trim()) return;
 
-    props.onAddTask(text);
+  const handleSubmit = () => {
+    if (!text.trim()) return;
+    onAddTask(text);
     settext("");
-  }
+  };
 
   return (
     <div className="task-input">
-      
-        <input
-          type="text"
-          name="task"
-          placeholder="Escribe una nueva tarea"
-          value={text}
-          onChange={(event) => settext(event.target.value)}
-        />
-      
+      <input
+        type="text"
+        name="task"
+        placeholder="Escribe una nueva tarea"
+        value={text}
+        onChange={(event) => settext(event.target.value)}
+        onKeyDown={(event) => (event.key === "Enter" ? handleSubmit() : "")}
+      />
 
       <button onClick={handleSubmit}>Agregar</button>
     </div>
