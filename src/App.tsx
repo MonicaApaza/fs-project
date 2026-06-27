@@ -16,11 +16,15 @@ function App() {
     setTasks([...tasks, { id: nextId, text, completed: false }]);
   };
 
+  const removeTask = (id:number) =>{
+    setTasks(tasks.filter(task=> task.id != id));
+  }
+
   return (
     <div className="app-container">
       <Header />
       <TaskInput onAddTask={addTask} />
-      <TaskList tasks={tasks} />
+      <TaskList tasks={tasks} onRemoveTask={removeTask}/>
     </div>
   );
 }

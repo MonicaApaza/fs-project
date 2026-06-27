@@ -4,6 +4,13 @@ export type Task = {
   completed: boolean;
 };
 
+export type TaskProps = {
+  id: number;
+  text: string;
+  completed: boolean;
+  onRemoveTask: (id: number) => void;
+};
+
 export const maxId = (tasks: Task[]) => {
   const maxId = tasks.reduce(
     (max, task) => (task.id > max ? (max = task.id) : (max = max)),

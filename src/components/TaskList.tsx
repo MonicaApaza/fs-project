@@ -1,12 +1,26 @@
 import TaskCard from "./TaskCard";
-import { Task } from "../Task";
+import { Task } from "../TaskUtil";
 
-function TaskList({ tasks }: { tasks: Task[] }) {
+type TaskListProps = {
+  tasks: Task[];
+  onRemoveTask: (id: number) => void;
+};
+
+function TaskList({ tasks, onRemoveTask }: TaskListProps) {
   return (
     <ul>
-      {tasks.map((task, index) => (
-        <TaskCard key={index} text={task.text}></TaskCard>
-      ))}
+      {tasks.map((task) => {
+        const { id, text, completed } = task;
+        return (
+          <TaskCard
+            key={id}
+            id={id}
+            text={text}
+            completed={completed}
+            onRemoveTask={onRemoveTask}
+          />
+        );
+      })}
     </ul>
   );
 }
