@@ -19,13 +19,13 @@ export const TaskInput = ({ onAddTask }: TaskInputProps) => {
       <input
         type="text"
         name="task"
-        placeholder="Escribe una nueva tarea"
+        placeholder="What needs to be done?"
         value={text}
         onChange={(event) => settext(event.target.value)}
         onKeyDown={(event) => (event.key === "Enter" ? handleSubmit() : "")}
       />
 
-      <button onClick={handleSubmit}>Agregar</button>
+      <button onClick={handleSubmit}>Add Task</button>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import TaskCard from "./TaskCard";
 import { Task } from "../TaskUtil";
+import EmptyState from "./EmptyState";
 
 type TaskListProps = {
   tasks: Task[];
@@ -8,6 +9,9 @@ type TaskListProps = {
 };
 
 function TaskList({ tasks, onRemoveTask, onMarkCompleted }: TaskListProps) {
+  if(tasks.length ===0){
+    return <EmptyState/>
+  }
   return (
     <ul>
       {tasks.map((task) => {
