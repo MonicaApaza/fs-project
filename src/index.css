@@ -98,3 +98,8 @@ button:hover{
 .task-card p{
   flex: 1;
 }
+
+.task-card .line-through{
+  text-decoration: line-through;
+  color:#747474;
+}

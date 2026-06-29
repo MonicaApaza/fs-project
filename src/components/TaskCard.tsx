@@ -24,7 +24,7 @@ function TaskCard({
           onChange={handleCheckChange}
           checked={completed}
         />
-        <p>{text}</p>
+        <p className={completed? "line-through":""}>{text}</p>
         <button onClick={handleRemoveTask}>Remove</button>
       </div>
     </li>
