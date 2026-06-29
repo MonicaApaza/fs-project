@@ -1,140 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-*{
+* {
   box-sizing: border-box;
 }
 
-body{
+body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  background-color: #f0f2f5;
+  color: #1a1a2e;
 }
 
-.app-container{
+.app-container {
   max-width: 600px;
   margin: 60px auto;
-  background-color: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  background-color: #ffffff;
+  padding: 32px;
+  border-radius: 16px;
+  /* feedback: sombra más pronunciada + borde sutil para dar profundidad al card */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-header{
+header {
   text-align: center;
-  margin-bottom: 30px;
+  /* feedback: reducir espacio vacío entre header y el input */
+  margin-bottom: 20px;
 }
 
-header h1{
+header h1 {
   margin: 0;
-  font-size: 36px;
-  color: #333;
+  /* feedback: título reducido de 36px a 2rem para menos salto con el subtítulo */
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  letter-spacing: -0.5px;
 }
 
-header p{
-  margin-top: 8px;
-  font-size: 18px;
-  color: #666;
+header p {
+  /* feedback: subtítulo más visible para suavizar el salto tipográfico */
+  margin-top: 6px;
+  font-size: 15px;
+  color: #7c8a9e;
+  font-weight: 400;
 }
 
-
-ul{
+ul {
   padding: 0;
   margin: 0;
 }
 
-li{
+li {
   list-style: none;
-  background-color: #f1f1f1;
-  padding: 14px 16px;
-  margin-bottom: 12px;
-  border-radius: 8px;
-  font-size: 16px;
-  color: #333;
-  
+  background-color: #f8f9fb;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #1a1a2e;
+  border: 1px solid #eef0f4;
+  transition: box-shadow 0.15s ease;
 }
 
-.task-input{
+li:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.task-input {
   display: flex;
   gap: 8px;
-  margin-bottom: 20px;
+  /* feedback: reducir espacio entre subtítulo e input */
+  margin-bottom: 16px;
 }
 
-input[type="text"]{
-  flex:1;
-  padding:10px 14px;
-  font-size: 18px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  
-  color:#333;
-  background-color: #f9f9f9;
+input[type="text"] {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 15px;
+  font-family: inherit;
+  border: 1.5px solid #e2e6ea;
+  border-radius: 10px;
+  color: #1a1a2e;
+  background-color: #f8f9fb;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
 }
 
-input:focus{
-  border-color: #aaa;
+input[type="text"]:focus {
+  border-color: #0d9488;
   background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
 }
 
-button{
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #333;
+/* feedback: color de acento índigo en lugar de negro puro */
+button {
+  padding: 10px 18px;
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 600;
+  background-color: #0d9488;
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
-button:hover{
-  background-color: #555;
+button:hover {
+  background-color: #0f766e;
 }
 
-.task-card{
+button:active {
+  transform: scale(0.97);
+}
+
+.task-card {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
 }
 
-.task-card p{
+.task-card p {
   flex: 1;
+  margin: 0;
 }
 
-.task-card .line-through{
+.task-card .line-through {
   text-decoration: line-through;
-  color:#747474;
+  color: #a0a8b4;
 }
 
-.empty-state{
+/* botón Remove diferenciado*/
+.task-card button {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: transparent;
+  color: #e05a5a;
+  border: 1.5px solid #e05a5a;
+  border-radius: 6px;
+}
+
+.task-card button:hover {
+  background-color: #e05a5a;
+  color: #fff;
+}
+
+input[type="checkbox"] {
+  accent-color: #0d9488;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.empty-state {
   display: flex;
   flex-direction: column;
-align-items: center;
-align-content: space-between;
-
-color: #999;
+  align-items: center;
+  padding: 24px 0;
+  gap: 4px;
+  color: #a0a8b4;
 }
 
-.empty-state p{
-  font-size: 18px;
-font-weight: 600;
-color: #666;
+.empty-state p {
+  font-size: 16px;
+  font-weight: 600;
+  color: #7c8a9e;
+  margin: 0;
 }
 
-.empty-state span{
-  font-size: 14px;
+.empty-state span {
+  font-size: 13px;
 }
 
-.footer{
+.footer {
   display: flex;
   justify-content: space-around;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #eef0f4;
   margin-top: 20px;
   padding: 14px 0 4px;
 }
 
-.footer p{
+.footer p {
   margin: 0;
   text-align: center;
   font-size: 13px;
-  color: #999;
-  font-weight: 600;
+  color: #a0a8b4;
+  font-weight: 500;
 }
