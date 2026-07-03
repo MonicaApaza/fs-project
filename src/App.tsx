@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import TaskList from "./components/TaskList";
 import { maxId, Task } from "./TaskUtil";
@@ -6,16 +6,34 @@ import { TaskInput } from "./components/TaskInput";
 import Footer from "./components/Footer";
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>([
-    { id: 1, text: "Estudiar React", completed: false },
-    { id: 2, text: "Practicar Typescript", completed: false },
-    { id: 3, text: "Entender Estado", completed: true },
-  ]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const serviceUrl = "http://localhost:1234/tasks";
 
-  const addTask = (text: string) => {
-    const nextId = maxId(tasks) + 1;
-    setTasks([...tasks, { id: nextId, text, completed: false }]);
+  useEffect(() => {
+    // Fetch tasks from the backend API when the component mounts
+    fetch(serviceUrl)
+      .then((response) => response.json())
+      .then((data) => setTasks(data))
+      .catch((error) => console.error("Error fetching tasks:", error));
+  }, []);
+
+  const addTask = async (text: string) => {
+    const response = await fetch(serviceUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      setTasks([...tasks, data.task]);
+    } else {
+      console.error("Error adding task:", response.statusText);
+    }
   };
+
 
   const removeTask = (id: number) => {
     setTasks(tasks.filter((task) => task.id != id));

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const {PrismaClient} = require("@prisma/client");
 const express = require("express");
 
@@ -17,13 +18,7 @@ type Task = {
   completed: boolean;
 };
 
-const tasks: Task[] = [
-  { id: 1, text: "Estudiar Node.js", completed: false },
-  { id: 2, text: "Crear servidor Express", completed: true },
-  { id: 3, text: "Probar rutas del backend", completed: false },
-];
 
-let nextId = 4;
 
 app.get("/", (req: any, res: any) => {
   res.send("Backend is working!");
