@@ -7,6 +7,8 @@ const PORT = 1234;
 
 const prisma = new PrismaClient();
 
+const cors = require("cors");
+app.use(cors());
 app.use(express.json());
 
 type Task = {
