@@ -1,7 +1,11 @@
+const {PrismaClient} = require("@prisma/client");
 const express = require("express");
+
 
 const app = express();
 const PORT = 1234;
+
+const prisma = new PrismaClient();
 
 app.use(express.json());
 
@@ -23,7 +27,10 @@ app.get("/", (req: any, res: any) => {
   res.send("Backend is working!");
 });
 
-app.get("/tasks", (req: any, res: any) => res.json(tasks));
+app.get("/tasks", async (req: any, res: any) => {
+  const tasksDB = await prisma.task.findMany();
+  res.json(tasksDB);
+});
 
 // POST /tasks — create a new task
 app.post("/tasks", (req: any, res: any) => {
