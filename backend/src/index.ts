@@ -33,28 +33,27 @@ app.get("/tasks", async (req: any, res: any) => {
 });
 
 // POST /tasks — create a new task
-app.post("/tasks", (req: any, res: any) => {
+app.post("/tasks", async (req: any, res: any) => {
   const { text } = req.body;
   if (!text || typeof text !== "string" || text.trim() === "") {
     return res.status(400).json({ message: "Field 'text' is required" });
   }
 
-  const newTask: Task = {
-    id: nextId++,
-    text: text.trim(),
-    completed: false,
-  };
-  tasks.push(newTask);
+  const newTask = await prisma.task.create({
+    data: {
+      text: text.trim(),
+      completed: false,
+    },
+  });
 
   res.status(201).json({ message: "Task created successfully", task: newTask });
 });
 
 // PUT /tasks/:id — full update (text + completed)
-app.put("/tasks/:id", (req: any, res: any) => {
+app.put("/tasks/:id", async (req: any, res: any) => {
   const id = Number(req.params.id);
-  const taskIndex = tasks.findIndex((t) => t.id === id);
-  if (taskIndex === -1) {
-    return res.status(404).json({ message: "Task not found" });
+  if (Number.isNaN(id)) {
+    return res.status(400).json({ message: "Invalid task id" });
   }
 
   const { text, completed } = req.body;
@@ -65,50 +64,73 @@ app.put("/tasks/:id", (req: any, res: any) => {
     return res.status(400).json({ message: "Field 'completed' must be a boolean" });
   }
 
-  tasks[taskIndex] = { id, text: text.trim(), completed };
-  res.json({ message: "Task updated successfully", task: tasks[taskIndex] });
-});
-
-// PATCH /tasks/:id — partial update (text and/or completed)
-app.patch("/tasks/:id", (req: any, res: any) => {
-  const id = Number(req.params.id);
-  const taskIndex = tasks.findIndex((t) => t.id === id);
-  if (taskIndex === -1) {
+  const existingTask = await prisma.task.findUnique({ where: { id } });
+  if (!existingTask) {
     return res.status(404).json({ message: "Task not found" });
   }
 
-  const task = tasks[taskIndex];
-  if (!task) {
+  const updatedTask = await prisma.task.update({
+    where: { id },
+    data: { text: text.trim(), completed },
+  });
+
+  res.json({ message: "Task updated successfully", task: updatedTask });
+});
+
+// PATCH /tasks/:id — partial update (text and/or completed)
+app.patch("/tasks/:id", async (req: any, res: any) => {
+  const id = Number(req.params.id);
+  if (Number.isNaN(id)) {
+    return res.status(400).json({ message: "Invalid task id" });
+  }
+
+  const existingTask = await prisma.task.findUnique({ where: { id } });
+  if (!existingTask) {
     return res.status(404).json({ message: "Task not found" });
   }
 
   const { text, completed } = req.body;
+  const data: { text?: string; completed?: boolean } = {};
+
   if (text !== undefined) {
     if (typeof text !== "string" || text.trim() === "") {
       return res.status(400).json({ message: "Field 'text' must be a non-empty string" });
     }
-    task.text = text.trim();
+    data.text = text.trim();
   }
   if (completed !== undefined) {
     if (typeof completed !== "boolean") {
       return res.status(400).json({ message: "Field 'completed' must be a boolean" });
     }
-    task.completed = completed;
+    data.completed = completed;
   }
 
-  res.json({ message: "Task updated successfully", task });
+  if (Object.keys(data).length === 0) {
+    return res.status(400).json({ message: "At least one field ('text' or 'completed') is required" });
+  }
+
+  const updatedTask = await prisma.task.update({
+    where: { id },
+    data,
+  });
+
+  res.json({ message: "Task updated successfully", task: updatedTask });
 });
 
 // DELETE /tasks/:id
-app.delete("/tasks/:id", (req: any, res: any) => {
+app.delete("/tasks/:id", async (req: any, res: any) => {
   const id = Number(req.params.id);
-  const taskIndex = tasks.findIndex((t) => t.id === id);
-  if (taskIndex === -1) {
+  if (Number.isNaN(id)) {
+    return res.status(400).json({ message: "Invalid task id" });
+  }
+
+  const existingTask = await prisma.task.findUnique({ where: { id } });
+  if (!existingTask) {
     return res.status(404).json({ message: "Task not found" });
   }
 
-  tasks.splice(taskIndex, 1);
-  res.json({ message: "Task deleted successfully", tasks });
+  await prisma.task.delete({ where: { id } });
+  res.json({ message: "Task deleted successfully" });
 });
 
 app.listen(PORT, () => {
