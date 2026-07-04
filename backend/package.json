@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "migrateprisma": "npx prisma@6.19.0 migrate dev",
+    "generateprisma": "npx prisma@6.19.0 generate"
   },
   "keywords": [],
   "author": "",
