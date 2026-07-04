@@ -38,16 +38,31 @@ app.post("/login", async (req: any, res: any) => {
   const validPassword = "123456";
 
   if (email === validEmail && password === validPassword) {
-    const token = jwt.sign(
-      { email },
-      "secret_key",
-      {
-        expiresIn: "1h",
-      },
-    );
+    const token = jwt.sign({ email }, "secret_key", {
+      expiresIn: "1h",
+    });
     res.json({ message: "Login successful", token });
   } else {
     res.status(401).json({ message: "Invalid credentials" });
+  }
+});
+
+app.get("/profile", (req: any, res: any) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ message: "Authorization header missing" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "Token missing" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, "secret_key");
+    res.json({ message: "Protected profile data", user: decoded });
+  } catch (err) {
+    res.status(401).json({ message: "Invalid or expired token" });
   }
 });
 
