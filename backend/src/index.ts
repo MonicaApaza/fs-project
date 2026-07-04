@@ -2,16 +2,14 @@ require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
 const express = require("express");
 const jwt = require("jsonwebtoken");
-
 const app = express();
-const PORT = 1234;
+const cors = require("cors");
 
 const prisma = new PrismaClient();
-
-const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 
+const PORT = 1234;
 
 app.get("/", (req: any, res: any) => {
   res.send("Backend is working!");
