@@ -12,11 +12,31 @@ app.use(express.json());
 
 const PORT = 1234;
 
+const authenticateToken = (req: any, res: any, next: any) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ message: "Authorization header missing" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "Token missing" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, "secret_key");
+    req.user = decoded;
+    next();
+  } catch {
+    res.status(401).json({ message: "Invalid or expired token" });
+  }
+};
+
 app.get("/", (req: any, res: any) => {
   res.send("Backend is working!");
 });
 
-app.get("/tasks", async (req: any, res: any) => {
+app.get("/tasks", authenticateToken, async (req: any, res: any) => {
   const tasksDB = await prisma.task.findMany();
   res.json(tasksDB);
 });
@@ -73,27 +93,12 @@ app.post("/login", async (req: any, res: any) => {
   });
 });
 
-app.get("/profile", (req: any, res: any) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return res.status(401).json({ message: "Authorization header missing" });
-  }
-
-  const token = authHeader.split(" ")[1];
-  if (!token) {
-    return res.status(401).json({ message: "Token missing" });
-  }
-
-  try {
-    const decoded = jwt.verify(token, "secret_key");
-    res.json({ message: "Protected profile data", user: decoded });
-  } catch {
-    res.status(401).json({ message: "Invalid or expired token" });
-  }
+app.get("/profile", authenticateToken, (req: any, res: any) => {
+  res.json({ message: "Protected profile data", user: req.user });
 });
 
 // POST /tasks — create a new task
-app.post("/tasks", async (req: any, res: any) => {
+app.post("/tasks", authenticateToken, async (req: any, res: any) => {
   const { text } = req.body;
   if (!text || typeof text !== "string" || text.trim() === "") {
     return res.status(400).json({ message: "Field 'text' is required" });
@@ -110,7 +115,7 @@ app.post("/tasks", async (req: any, res: any) => {
 });
 
 // PUT /tasks/:id — full update (text + completed)
-app.put("/tasks/:id", async (req: any, res: any) => {
+app.put("/tasks/:id", authenticateToken, async (req: any, res: any) => {
   const id = Number(req.params.id);
   if (Number.isNaN(id)) {
     return res.status(400).json({ message: "Invalid task id" });
@@ -140,7 +145,7 @@ app.put("/tasks/:id", async (req: any, res: any) => {
 });
 
 // PATCH /tasks/:id — partial update (text and/or completed)
-app.patch("/tasks/:id", async (req: any, res: any) => {
+app.patch("/tasks/:id", authenticateToken, async (req: any, res: any) => {
   const id = Number(req.params.id);
   if (Number.isNaN(id)) {
     return res.status(400).json({ message: "Invalid task id" });
@@ -186,7 +191,7 @@ app.patch("/tasks/:id", async (req: any, res: any) => {
 });
 
 // DELETE /tasks/:id
-app.delete("/tasks/:id", async (req: any, res: any) => {
+app.delete("/tasks/:id", authenticateToken, async (req: any, res: any) => {
   const id = Number(req.params.id);
   if (Number.isNaN(id)) {
     return res.status(400).json({ message: "Invalid task id" });
