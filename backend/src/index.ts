@@ -1,7 +1,7 @@
 require("dotenv").config();
-const {PrismaClient} = require("@prisma/client");
+const { PrismaClient } = require("@prisma/client");
 const express = require("express");
-
+const jwt = require("jsonwebtoken");
 
 const app = express();
 const PORT = 1234;
@@ -18,8 +18,6 @@ type Task = {
   completed: boolean;
 };
 
-
-
 app.get("/", (req: any, res: any) => {
   res.send("Backend is working!");
 });
@@ -27,6 +25,30 @@ app.get("/", (req: any, res: any) => {
 app.get("/tasks", async (req: any, res: any) => {
   const tasksDB = await prisma.task.findMany();
   res.json(tasksDB);
+});
+
+app.post("/login", async (req: any, res: any) => {
+  const { email, password } = req.body || {};
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
+
+  const validEmail = "admin@test.com";
+  const validPassword = "123456";
+
+  if (email === validEmail && password === validPassword) {
+    const token = jwt.sign(
+      { email },
+      "secret_key",
+      {
+        expiresIn: "1h",
+      },
+    );
+    res.json({ message: "Login successful", token });
+  } else {
+    res.status(401).json({ message: "Invalid credentials" });
+  }
 });
 
 // POST /tasks — create a new task
@@ -58,7 +80,9 @@ app.put("/tasks/:id", async (req: any, res: any) => {
     return res.status(400).json({ message: "Field 'text' is required" });
   }
   if (typeof completed !== "boolean") {
-    return res.status(400).json({ message: "Field 'completed' must be a boolean" });
+    return res
+      .status(400)
+      .json({ message: "Field 'completed' must be a boolean" });
   }
 
   const existingTask = await prisma.task.findUnique({ where: { id } });
@@ -91,19 +115,25 @@ app.patch("/tasks/:id", async (req: any, res: any) => {
 
   if (text !== undefined) {
     if (typeof text !== "string" || text.trim() === "") {
-      return res.status(400).json({ message: "Field 'text' must be a non-empty string" });
+      return res
+        .status(400)
+        .json({ message: "Field 'text' must be a non-empty string" });
     }
     data.text = text.trim();
   }
   if (completed !== undefined) {
     if (typeof completed !== "boolean") {
-      return res.status(400).json({ message: "Field 'completed' must be a boolean" });
+      return res
+        .status(400)
+        .json({ message: "Field 'completed' must be a boolean" });
     }
     data.completed = completed;
   }
 
   if (Object.keys(data).length === 0) {
-    return res.status(400).json({ message: "At least one field ('text' or 'completed') is required" });
+    return res.status(400).json({
+      message: "At least one field ('text' or 'completed') is required",
+    });
   }
 
   const updatedTask = await prisma.task.update({
