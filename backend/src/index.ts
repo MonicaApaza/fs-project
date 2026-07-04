@@ -12,11 +12,6 @@ const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 
-type Task = {
-  id: number;
-  text: string;
-  completed: boolean;
-};
 
 app.get("/", (req: any, res: any) => {
   res.send("Backend is working!");
@@ -61,7 +56,7 @@ app.get("/profile", (req: any, res: any) => {
   try {
     const decoded = jwt.verify(token, "secret_key");
     res.json({ message: "Protected profile data", user: decoded });
-  } catch (err) {
+  } catch {
     res.status(401).json({ message: "Invalid or expired token" });
   }
 });
