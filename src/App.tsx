@@ -35,16 +35,37 @@ function App() {
   };
 
 
-  const removeTask = (id: number) => {
-    setTasks(tasks.filter((task) => task.id != id));
+  const removeTask = async (id: number) => {
+    const response = await fetch(`${serviceUrl}/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      setTasks(tasks.filter((task) => task.id !== id));
+    } else {
+      console.error("Error removing task:", response.statusText);
+    }
   };
 
-  const markCompleted = (id: number, completed: boolean) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: completed } : task,
-      ),
-    );
+  const markCompleted = async (id: number, completed: boolean) => {
+    const response = await fetch(`${serviceUrl}/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ completed }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      setTasks(
+        tasks.map((task) =>
+          task.id === id ? { ...task, completed: data.task.completed } : task
+        )
+      );
+    } else {
+      console.error("Error updating task:", response.statusText);
+    }
   };
 
   return (
