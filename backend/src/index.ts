@@ -22,10 +22,12 @@ app.get("/tasks", async (req: any, res: any) => {
 });
 
 app.post("/register", async (req: any, res: any) => {
-  const {name, email, password } = req.body || {};
+  const { name, email, password } = req.body || {};
 
   if (!name || !email || !password) {
-    return res.status(400).json({ message: "Name, email, and password are required" });
+    return res
+      .status(400)
+      .json({ message: "Name, email, and password are required" });
   }
 
   const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -50,17 +52,25 @@ app.post("/login", async (req: any, res: any) => {
     return res.status(400).json({ message: "Email and password are required" });
   }
 
-  const validEmail = "admin@test.com";
-  const validPassword = "123456";
-
-  if (email === validEmail && password === validPassword) {
-    const token = jwt.sign({ email }, "secret_key", {
-      expiresIn: "1h",
-    });
-    res.json({ message: "Login successful", token });
-  } else {
-    res.status(401).json({ message: "Invalid credentials" });
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
   }
+
+  const matchingPassword = await bcrypt.compare(password, user.password);
+  if (!matchingPassword) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+
+  const token = jwt.sign({ email }, "secret_key", {
+    expiresIn: "1h",
+  });
+
+  res.json({
+    message: "Login successful",
+    token,
+    user: { id: user.id, name: user.name, email: user.email },
+  });
 });
 
 app.get("/profile", (req: any, res: any) => {
