@@ -8,24 +8,47 @@ import Login from "./components/Login";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [token, setToken] = useState(() => localStorage.getItem("token") || "");
   const serviceUrl = "http://localhost:1234/tasks";
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
-
-  if (!token) {
-    return <Login />;
-  }
 
   useEffect(() => {
-    // Fetch tasks from the backend API when the component mounts
+    if (!token) {
+      setTasks([]);
+      return;
+    }
+
     fetch(serviceUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => response.json())
-      .then((data) => setTasks(data))
-      .catch((error) => console.error("Error fetching tasks:", error));
-  }, []);
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => setTasks(Array.isArray(data) ? data : []))
+      .catch((error) => {
+        console.error("Error fetching tasks:", error);
+        setTasks([]);
+      });
+  }, [token]);
+
+  const handleLoginSuccess = (newToken: string) => {
+    localStorage.setItem("token", newToken);
+    setToken(newToken);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken("");
+    setTasks([]);
+  };
+
+  if (!token) {
+    return <Login onLoginSuccess={handleLoginSuccess} />;
+  }
 
   const addTask = async (text: string) => {
     const response = await fetch(serviceUrl, {
@@ -39,7 +62,7 @@ function App() {
 
     if (response.ok) {
       const data = await response.json();
-      setTasks([...tasks, data.task]);
+      setTasks((prevTasks) => [...prevTasks, data.task]);
     } else {
       console.error("Error adding task:", response.statusText);
     }
@@ -54,7 +77,7 @@ function App() {
     });
 
     if (response.ok) {
-      setTasks(tasks.filter((task) => task.id !== id));
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
     } else {
       console.error("Error removing task:", response.statusText);
     }
@@ -72,8 +95,8 @@ function App() {
 
     if (response.ok) {
       const data = await response.json();
-      setTasks(
-        tasks.map((task) =>
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
           task.id === id ? { ...task, completed: data.task.completed } : task,
         ),
       );
@@ -84,7 +107,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <Header />
+      <Header onLogout={handleLogout} />
       <TaskInput onAddTask={addTask} />
       <TaskList
         tasks={tasks}
