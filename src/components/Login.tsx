@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+type LoginProps = {
+  onLoginSuccess?: (token: string) => void;
+};
 
-function Login() {
+function Login({ onLoginSuccess }: LoginProps) {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => { 
+  const handleLogin = () => {
     fetch("http://localhost:1234/login", {
       method: "POST",
       headers: {
@@ -19,22 +22,22 @@ function Login() {
       .then((response) => {
         if (response.ok) {
           return response.json();
-        } else {
-            console.log("Login failed with status:");
-          throw new Error("Invalid credentials");
         }
+
+        console.log("Login failed with status:", response.status);
+        throw new Error("Invalid credentials");
       })
       .then((data) => {
         const token = data.token;
         localStorage.setItem("token", token);
+        onLoginSuccess?.(token);
         navigate("/");
       })
       .catch((error) => {
         console.error("Login failed:", error);
         alert("Login failed. Please check your credentials.");
       });
-
-   };
+  };
 
   return (
     <div className="login-page">
@@ -78,6 +81,7 @@ function Login() {
             type="password"
             className="login-input"
             placeholder="Password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
