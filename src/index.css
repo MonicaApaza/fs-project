@@ -7,7 +7,7 @@
 body {
   margin: 0;
   font-family: 'Inter', Arial, Helvetica, sans-serif;
-  background-color: #f0f2f5;
+  background-color: #e8e7e3; 
   color: #1a1a2e;
 }
 
@@ -190,3 +190,104 @@ input[type="checkbox"] {
   color: #a0a8b4;
   font-weight: 500;
 }
+
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color:#e8e7e3; 
+}
+
+.login-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 40px 32px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.login-icon {
+  width: 46px;
+  height: 46px;
+  background-color:  #0d9488;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.login-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111827; 
+}
+
+.login-subtitle {
+   margin: 6px 0 28px;
+  font-size: 14px;
+  color: #7c8a9e;
+  font-weight: 400;
+}
+
+.login-field{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.login-label {
+  margin-bottom: 6px;
+  display: block;
+  font-size: 14px;
+  color: #818489; 
+  font-weight: 500;
+}
+
+.login-input {
+   padding: 11px 14px;
+  width: 100%;
+  font-size: 15px;
+  font-family: inherit;
+  border: 1.5px solid #e2e6ea;
+  border-radius: 10px;
+  color: #1a1a2e;
+  background-color: #f8f9fb;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+
+}
+
+.login-input:focus {
+  border-color: #0d9488;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 600;
+  background-color: #0d9488;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.login-btn:hover {
+  background-color: #0f766e;
+}
+
