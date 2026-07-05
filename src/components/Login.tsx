@@ -1,6 +1,41 @@
-import React from 'react'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function Login() {
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => { 
+    fetch("http://localhost:1234/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+            console.log("Login failed with status:", response);
+          throw new Error("Invalid credentials");
+        }
+      })
+      .then((data) => {
+        const token = data.token;
+        localStorage.setItem("token", token);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+        alert("Login failed. Please check your credentials.");
+      });
+
+   };
+
   return (
     <div className="login-page">
       <div className="login-card">
@@ -29,7 +64,13 @@ function Login() {
 
         <div className="login-field">
           <label className="login-label">Email</label>
-          <input type="email" className="login-input" placeholder="Email" />
+          <input
+            type="email"
+            className="login-input"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
         <div className="login-field">
           <label className="login-label">Password</label>
@@ -37,13 +78,16 @@ function Login() {
             type="password"
             className="login-input"
             placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
-        <button className="login-btn">Log In</button>
+        <button className="login-btn" onClick={handleLogin}>
+          Log In
+        </button>
       </div>
     </div>
   );
 }
 
-export default Login
+export default Login;

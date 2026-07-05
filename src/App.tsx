@@ -4,10 +4,16 @@ import TaskList from "./components/TaskList";
 import { maxId, Task } from "./TaskUtil";
 import { TaskInput } from "./components/TaskInput";
 import Footer from "./components/Footer";
+import Login from "./components/Login";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const serviceUrl = "http://localhost:1234/tasks";
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+
+  if (!token) {
+    return (<Login />);
+  }
 
   useEffect(() => {
     // Fetch tasks from the backend API when the component mounts
