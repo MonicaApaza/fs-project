@@ -20,7 +20,7 @@ function Login() {
         if (response.ok) {
           return response.json();
         } else {
-            console.log("Login failed with status:", response);
+            console.log("Login failed with status:");
           throw new Error("Invalid credentials");
         }
       })

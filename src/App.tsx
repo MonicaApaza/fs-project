@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import TaskList from "./components/TaskList";
-import { maxId, Task } from "./TaskUtil";
+import { Task } from "./TaskUtil";
 import { TaskInput } from "./components/TaskInput";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
@@ -12,12 +12,16 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
 
   if (!token) {
-    return (<Login />);
+    return <Login />;
   }
 
   useEffect(() => {
     // Fetch tasks from the backend API when the component mounts
-    fetch(serviceUrl)
+    fetch(serviceUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setTasks(data))
       .catch((error) => console.error("Error fetching tasks:", error));
@@ -28,6 +32,7 @@ function App() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ text }),
     });
@@ -40,10 +45,12 @@ function App() {
     }
   };
 
-
   const removeTask = async (id: number) => {
     const response = await fetch(`${serviceUrl}/${id}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (response.ok) {
@@ -58,6 +65,7 @@ function App() {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ completed }),
     });
@@ -66,8 +74,8 @@ function App() {
       const data = await response.json();
       setTasks(
         tasks.map((task) =>
-          task.id === id ? { ...task, completed: data.task.completed } : task
-        )
+          task.id === id ? { ...task, completed: data.task.completed } : task,
+        ),
       );
     } else {
       console.error("Error updating task:", response.statusText);
