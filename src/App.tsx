@@ -23,12 +23,18 @@ function App() {
       },
     })
       .then((response) => {
+        if (response.status === 401) {
+          handleLogout();
+          return null;
+        }
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }
         return response.json();
       })
-      .then((data) => setTasks(Array.isArray(data) ? data : []))
+      .then((data) => {
+        if (data) setTasks(Array.isArray(data) ? data : []);
+      })
       .catch((error) => {
         console.error("Error fetching tasks:", error);
         setTasks([]);
