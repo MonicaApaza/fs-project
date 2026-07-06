@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 * {
   box-sizing: border-box;
@@ -6,8 +6,8 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', Arial, Helvetica, sans-serif;
-  background-color: #e8e7e3; 
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  background-color: #e8e7e3;
   color: #1a1a2e;
 }
 
@@ -18,13 +18,13 @@ body {
   padding: 32px;
   border-radius: 16px;
   /* feedback: sombra más pronunciada + borde sutil para dar profundidad al card */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 header {
-  text-align: center;
-  /* feedback: reducir espacio vacío entre header y el input */
   margin-bottom: 20px;
 }
 
@@ -43,6 +43,36 @@ header p {
   font-size: 15px;
   color: #7c8a9e;
   font-weight: 400;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 600;
+  background-color: transparent;
+  color: #e05a5a;
+  border: 1.5px solid #e05a5a;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    transform 0.1s;
+}
+
+.logout-btn:hover {
+  background-color: #e05a5a;
+  color: #fff;
 }
 
 ul {
@@ -83,7 +113,10 @@ input[type="text"] {
   color: #1a1a2e;
   background-color: #f8f9fb;
   outline: none;
-  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s,
+    box-shadow 0.2s;
 }
 
 input[type="text"]:focus {
@@ -103,7 +136,15 @@ button {
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition:
+    background-color 0.2s,
+    transform 0.1s;
+}
+
+.task-btn{
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 button:hover {
@@ -196,7 +237,7 @@ input[type="checkbox"] {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color:#e8e7e3; 
+  background-color: #e8e7e3;
 }
 
 .login-card {
@@ -208,14 +249,16 @@ input[type="checkbox"] {
   border-radius: 20px;
   width: 100%;
   max-width: 380px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .login-icon {
   width: 46px;
   height: 46px;
-  background-color:  #0d9488;
+  background-color: #0d9488;
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -227,17 +270,17 @@ input[type="checkbox"] {
   margin: 0;
   font-size: 1.6rem;
   font-weight: 700;
-  color: #111827; 
+  color: #111827;
 }
 
 .login-subtitle {
-   margin: 6px 0 28px;
+  margin: 6px 0 28px;
   font-size: 14px;
   color: #7c8a9e;
   font-weight: 400;
 }
 
-.login-field{
+.login-field {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -248,12 +291,12 @@ input[type="checkbox"] {
   margin-bottom: 6px;
   display: block;
   font-size: 14px;
-  color: #818489; 
+  color: #818489;
   font-weight: 500;
 }
 
 .login-input {
-   padding: 11px 14px;
+  padding: 11px 14px;
   width: 100%;
   font-size: 15px;
   font-family: inherit;
@@ -262,9 +305,11 @@ input[type="checkbox"] {
   color: #1a1a2e;
   background-color: #f8f9fb;
   outline: none;
-  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s,
+    box-shadow 0.2s;
   box-sizing: border-box;
-
 }
 
 .login-input:focus {
@@ -274,6 +319,10 @@ input[type="checkbox"] {
 }
 
 .login-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
   width: 100%;
   padding: 12px 18px;
   font-size: 14px;
@@ -284,10 +333,11 @@ input[type="checkbox"] {
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition:
+    background-color 0.2s,
+    transform 0.1s;
 }
 
 .login-btn:hover {
   background-color: #0f766e;
 }
-

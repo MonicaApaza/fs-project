@@ -1,3 +1,4 @@
+import { LogIn } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -83,10 +84,16 @@ function Login({ onLoginSuccess }: LoginProps) {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleLogin();
+              }
+            }}
           />
         </div>
 
         <button className="login-btn" onClick={handleLogin}>
+          <LogIn size={16} />
           Log In
         </button>
       </div>
