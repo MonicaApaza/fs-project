@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import React from "react";
 import { useState } from "react";
 
@@ -25,7 +26,11 @@ export const TaskInput = ({ onAddTask }: TaskInputProps) => {
         onKeyDown={(event) => (event.key === "Enter" ? handleSubmit() : "")}
       />
 
-      <button onClick={handleSubmit}>Add Task</button>
+      <button className="task-btn" onClick={handleSubmit}>
+        {" "}
+        <Plus size={16} />
+        Add Task
+      </button>
     </div>
   );
 };

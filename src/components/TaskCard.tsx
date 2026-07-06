@@ -1,3 +1,4 @@
+import { Trash2 } from "lucide-react";
 import { TaskProps } from "../TaskUtil";
 
 function TaskCard({
@@ -24,8 +25,10 @@ function TaskCard({
           onChange={handleCheckChange}
           checked={completed}
         />
-        <p className={completed? "line-through":""}>{text}</p>
-        <button onClick={handleRemoveTask}>Remove</button>
+        <p className={completed ? "line-through" : ""}>{text}</p>
+        <button onClick={handleRemoveTask}>
+          <Trash2 size={13} /> Remove
+        </button>
       </div>
     </li>
   );
