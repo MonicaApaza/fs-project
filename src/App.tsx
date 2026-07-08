@@ -9,7 +9,7 @@ import Login from "./components/Login";
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [token, setToken] = useState(() => localStorage.getItem("token") || "");
-  const serviceUrl = "http://localhost:1234/tasks";
+  const serviceUrl = `${import.meta.env.VITE_API_URL}/tasks`;
 
   useEffect(() => {
     if (!token) {

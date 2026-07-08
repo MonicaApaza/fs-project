@@ -13,7 +13,7 @@ function Login({ onLoginSuccess }: LoginProps) {
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    fetch("http://localhost:1234/login", {
+    fetch(`${import.meta.env.VITE_API_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
