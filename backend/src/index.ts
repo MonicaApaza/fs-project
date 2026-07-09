@@ -19,7 +19,7 @@ if (!JWT_SECRET || JWT_SECRET.length < 32) {
 
 const authenticateToken = (req: any, res: any, next: any) => {
   const authHeader = req.headers.authorization;
-  if (!authHeader?.startsWith("bearer ")) {
+  if (!authHeader || !authHeader.toLowerCase().startsWith("bearer ")) {
     return res
       .status(401)
       .json({ message: "Authorization header missing or malformed" });
