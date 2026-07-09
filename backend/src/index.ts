@@ -11,11 +11,18 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = 1234;
+const JWT_SECRET = process.env["JWT_SECRET"];
+
+if (!JWT_SECRET || JWT_SECRET.length < 32) {
+  throw new Error("JWT_SECRET must be defined and at least 32 characters long");
+}
 
 const authenticateToken = (req: any, res: any, next: any) => {
   const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return res.status(401).json({ message: "Authorization header missing" });
+  if (!authHeader?.startsWith("bearer ")) {
+    return res
+      .status(401)
+      .json({ message: "Authorization header missing or malformed" });
   }
 
   const token = authHeader.split(" ")[1];
@@ -24,7 +31,10 @@ const authenticateToken = (req: any, res: any, next: any) => {
   }
 
   try {
-    const decoded = jwt.verify(token, "secret_key");
+    const decoded = jwt.verify(token, JWT_SECRET) as {
+      userId: number;
+      email: string;
+    };
     req.user = decoded;
     next();
   } catch {
@@ -93,8 +103,9 @@ app.post("/login", async (req: any, res: any, next: any) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ email }, "secret_key", {
+    const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
       expiresIn: "1h",
+      algorithm: "HS256",
     });
 
     res.json({
@@ -169,7 +180,7 @@ app.put(
     } catch (err) {
       next(err);
     }
-  }
+  },
 );
 
 // PATCH /tasks/:id — partial update (text and/or completed)
@@ -223,7 +234,7 @@ app.patch(
     } catch (err) {
       next(err);
     }
-  }
+  },
 );
 
 // DELETE /tasks/:id
@@ -247,12 +258,12 @@ app.delete(
     } catch (err) {
       next(err);
     }
-  }
+  },
 );
 
 // Global error handler
 app.use((err: any, req: any, res: any, next: any) => {
-  console.error('An error ocurred:', err);
+  console.error("An error ocurred:", err);
   res.status(500).json({ message: "Internal server error" });
 });
 
