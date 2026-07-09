@@ -5,10 +5,30 @@ const jwt = require("jsonwebtoken");
 const app = express();
 const cors = require("cors");
 const bcrypt = require("bcrypt");
+const rateLimit = require("express-rate-limit");
 
 const prisma = new PrismaClient();
 app.use(cors());
 app.use(express.json());
+
+const loginLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 10,
+  message: { message: "Too many login attemps, try aggain in 10 min" },
+  standardHeaders: true, // incluye headers RateLimit-* en la respuesta
+  legacyHeaders: false,
+  skipSuccessfulRequests: true, // un login exitoso NO cuenta contra el límite
+});
+
+  const registerLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // ventana de 1 hora
+    max: 5, // máximo 5 registros por IP por hora
+    message: {
+      message: "Too many registration attempts. Please try again later.",
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
 
 const PORT = 1234;
 const JWT_SECRET = process.env["JWT_SECRET"];
@@ -48,14 +68,16 @@ app.get("/", (req: any, res: any) => {
 
 app.get("/tasks", authenticateToken, async (req: any, res: any, next: any) => {
   try {
-    const tasksDB = await prisma.task.findMany();
+    const tasksDB = await prisma.task.findMany({
+      where: { userId: req.user.userId },
+    });
     res.json(tasksDB);
   } catch (err) {
     next(err);
   }
 });
 
-app.post("/register", async (req: any, res: any, next: any) => {
+app.post("/register", registerLimiter, async (req: any, res: any, next: any) => {
   try {
     const { name, email, password } = req.body || {};
 
@@ -83,7 +105,7 @@ app.post("/register", async (req: any, res: any, next: any) => {
   }
 });
 
-app.post("/login", async (req: any, res: any, next: any) => {
+app.post("/login", loginLimiter, async (req: any, res: any, next: any) => {
   try {
     const { email, password } = req.body || {};
 
@@ -134,6 +156,7 @@ app.post("/tasks", authenticateToken, async (req: any, res: any, next: any) => {
       data: {
         text: text.trim(),
         completed: false,
+        userId: req.user.userId,
       },
     });
 
@@ -173,7 +196,7 @@ app.put(
 
       const updatedTask = await prisma.task.update({
         where: { id },
-        data: { text: text.trim(), completed },
+        data: { text: text.trim(), completed, userId: req.user.userId },
       });
 
       res.json({ message: "Task updated successfully", task: updatedTask });

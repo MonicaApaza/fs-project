@@ -26,5 +26,7 @@ dist-ssr
 build/
 
 .env
+.env.dev
+.env.prod
 
 .env.local
