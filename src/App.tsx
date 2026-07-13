@@ -5,6 +5,7 @@ import { Task } from "./TaskUtil";
 import { TaskInput } from "./components/TaskInput";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
+import { apiFetch } from "./apiFetch";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -17,9 +18,8 @@ function App() {
       return;
     }
 
-    fetch(serviceUrl, {
+    apiFetch(serviceUrl, {
       method:"GET",
-      credentials: "include",
     })
       .then((response) => {
         if (response.status === 401) {
@@ -50,7 +50,7 @@ function App() {
   };
 
   const addTask = async (text: string) => {
-    const response = await fetch(serviceUrl, {
+    const response = await apiFetch(serviceUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,7 +68,7 @@ function App() {
   };
 
   const removeTask = async (id: number) => {
-    const response = await fetch(`${serviceUrl}/${id}`, {
+    const response = await apiFetch(`${serviceUrl}/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${isAuthenticated}`,
@@ -83,7 +83,7 @@ function App() {
   };
 
   const markCompleted = async (id: number, completed: boolean) => {
-    const response = await fetch(`${serviceUrl}/${id}`, {
+    const response = await apiFetch(`${serviceUrl}/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
