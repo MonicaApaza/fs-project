@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type LoginProps = {
-  onLoginSuccess?: (token: string) => void;
+  onLoginSuccess?: (isAuthenticated: boolean) => void;
 };
 
 function Login({ onLoginSuccess }: LoginProps) {
@@ -15,6 +15,7 @@ function Login({ onLoginSuccess }: LoginProps) {
   const handleLogin = () => {
     fetch(`${import.meta.env.VITE_API_URL}/login`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -29,10 +30,7 @@ function Login({ onLoginSuccess }: LoginProps) {
         throw new Error("Invalid credentials");
       })
       .then((data) => {
-        const token = data.token;
-        localStorage.setItem("token", token);
-        onLoginSuccess?.(token);
-        navigate("/");
+        onLoginSuccess?.(true);
       })
       .catch((error) => {
         console.error("Login failed:", error);

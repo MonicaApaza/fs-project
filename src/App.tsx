@@ -8,19 +8,18 @@ import Login from "./components/Login";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [token, setToken] = useState(() => localStorage.getItem("token") || "");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const serviceUrl = `${import.meta.env.VITE_API_URL}/tasks`;
 
   useEffect(() => {
-    if (!token) {
+    if (!isAuthenticated) {
       setTasks([]);
       return;
     }
 
     fetch(serviceUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      method:"GET",
+      credentials: "include",
     })
       .then((response) => {
         if (response.status === 401) {
@@ -39,29 +38,23 @@ function App() {
         console.error("Error fetching tasks:", error);
         setTasks([]);
       });
-  }, [token]);
+  }, [isAuthenticated]);
 
-  const handleLoginSuccess = (newToken: string) => {
-    localStorage.setItem("token", newToken);
-    setToken(newToken);
+  const handleLoginSuccess = (isAuthenticated: boolean) => {
+    setIsAuthenticated(isAuthenticated);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    setToken("");
+    setIsAuthenticated(false);
     setTasks([]);
   };
-
-  if (!token) {
-    return <Login onLoginSuccess={handleLoginSuccess} />;
-  }
 
   const addTask = async (text: string) => {
     const response = await fetch(serviceUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${isAuthenticated}`,
       },
       body: JSON.stringify({ text }),
     });
@@ -78,7 +71,7 @@ function App() {
     const response = await fetch(`${serviceUrl}/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${isAuthenticated}`,
       },
     });
 
@@ -94,7 +87,7 @@ function App() {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${isAuthenticated}`,
       },
       body: JSON.stringify({ completed }),
     });
@@ -110,6 +103,10 @@ function App() {
       console.error("Error updating task:", response.statusText);
     }
   };
+
+  if (!isAuthenticated) {
+    return <Login onLoginSuccess={handleLoginSuccess} />;
+  }
 
   return (
     <div className="app-container">
