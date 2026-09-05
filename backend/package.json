@@ -7,7 +7,8 @@
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint src/",
     "migrateprisma": "npx prisma@6.19.0 migrate dev",
-    "generateprisma": "npx prisma@6.19.0 generate"
+    "generateprisma": "npx prisma@6.19.0 generate",
+    "build": "npx prisma generate && npx prisma migrate deploy"
   },
   "keywords": [],
   "author": "",
