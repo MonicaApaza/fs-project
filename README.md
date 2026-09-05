@@ -107,13 +107,17 @@ npm run dev
 
 ## 📜 Comandos disponibles
 
-Ejecutar dentro de `frontend/` o `backend/` según corresponda:
+Ejecutar dentro de `frontend/` o `backend/` según la columna "Proyecto":
 
-| Comando | Descripción |
-|---|---|
-| `npm run dev` | Levanta el entorno de desarrollo |
-| `npm run build` | Genera el build de producción (frontend) |
-| `npm test` | Corre las pruebas automatizadas (pendiente — Sesión 3) |
+| Comando | Descripción | Proyecto |
+|---|---|---|
+| `npm run dev` | Levanta el entorno de desarrollo (Vite / ts-node-dev) | Frontend y Backend |
+| `npm run build` | Genera el build de producción | Frontend |
+| `npm run preview` | Sirve localmente el build de producción | Frontend |
+| `npm run lint` | Corre ESLint sobre el código fuente | Frontend y Backend |
+| `npm run migrateprisma` | Ejecuta las migraciones de Prisma (`prisma migrate dev`) | Backend |
+| `npm run generateprisma` | Genera el cliente de Prisma (`prisma generate`) | Backend |
+| `npm test` | Corre las pruebas automatizadas (pendiente — Sesión 3) | Frontend y Backend |
 
 ---
 
