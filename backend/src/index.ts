@@ -262,7 +262,7 @@ app.delete(
 );
 
 // Global error handler
-app.use((err: any, req: any, res: any, next: any) => {
+app.use((err: any, req: any, res: any, _next: any) => {
   console.error("An error ocurred:", err);
   res.status(500).json({ message: "Internal server error" });
 });
