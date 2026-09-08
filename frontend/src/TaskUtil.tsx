@@ -18,4 +18,4 @@ export const maxId = (tasks: Task[]) => {
     0,
   );
   return maxId;
-};
+
