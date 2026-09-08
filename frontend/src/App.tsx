@@ -19,7 +19,6 @@ function App() {
 
   useEffect(() => {
     if (!token) {
-      setTasks([]);
       return;
     }
 
