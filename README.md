@@ -2,7 +2,7 @@
 
 Aplicación web de gestión de tareas con autenticación de usuarios (React + TypeScript en el frontend, Node.js + Express en el backend).
 
-<!-- BADGE_CI -->
+[![CI](https://github.com/MonicaApaza/fs-project/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/MonicaApaza/fs-project/actions/workflows/ci.yml)
 
 **Frontend:** https://fs-project-five.vercel.app/
 **Backend:** https://fs-project-si59.onrender.com
