@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import TaskList from "./components/TaskList";
-import { Task } from "./TaskUtil";
+import type { Task } from "./TaskUtil";
 import { TaskInput } from "./components/TaskInput";
 import Footer from "./components/Footer";
 import Login from "./components/Login";

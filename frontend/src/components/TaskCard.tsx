@@ -1,5 +1,5 @@
 import { Trash2 } from "lucide-react";
-import { TaskProps } from "../TaskUtil";
+import type { TaskProps } from "../TaskUtil";
 
 function TaskCard({
   id,

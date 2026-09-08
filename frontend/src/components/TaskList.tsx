@@ -1,5 +1,5 @@
 import TaskCard from "./TaskCard";
-import { Task } from "../TaskUtil";
+import type { Task } from "../TaskUtil";
 import EmptyState from "./EmptyState";
 
 type TaskListProps = {
