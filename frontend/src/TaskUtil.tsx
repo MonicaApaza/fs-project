@@ -14,7 +14,7 @@ export type TaskProps = {
 
 export const maxId = (tasks: Task[]) => {
   const maxId = tasks.reduce(
-    (max, task) => (task.id > max ? (max = task.id) : (max = max)),
+    (max, task) => (task.id > max ? task.id : max),
     0,
   );
   return maxId;
