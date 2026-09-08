@@ -11,6 +11,12 @@ function App() {
   const [token, setToken] = useState(() => localStorage.getItem("token") || "");
   const serviceUrl = `${import.meta.env.VITE_API_URL}/tasks`;
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken("");
+    setTasks([]);
+  };
+
   useEffect(() => {
     if (!token) {
       setTasks([]);
@@ -44,12 +50,6 @@ function App() {
   const handleLoginSuccess = (newToken: string) => {
     localStorage.setItem("token", newToken);
     setToken(newToken);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setToken("");
-    setTasks([]);
   };
 
   if (!token) {
