@@ -1,6 +1,6 @@
 import { LogIn } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 type LoginProps = {
   onLoginSuccess?: (token: string) => void;
@@ -96,6 +96,10 @@ function Login({ onLoginSuccess }: LoginProps) {
           <LogIn size={16} />
           Log In
         </button>
+
+        <p className="login-subtitle">
+          Don't have an account? <Link to="/register">Sign up</Link>
+        </p>
       </div>
     </div>
   );
