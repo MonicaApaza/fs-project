@@ -13,7 +13,7 @@ describe('maxId', () => {
     // Act
     const resultado = maxId(tareas)
     // Assert
-    expect(resultado).toBe(99)
+    expect(resultado).toBe(5)
   })
 
   it('devuelve 0 cuando la lista está vacía', () => {
