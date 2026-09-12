@@ -9,7 +9,8 @@
     "migrateprisma": "npx prisma@6.19.0 migrate dev",
     "generateprisma": "npx prisma@6.19.0 generate",
     "build": "npx prisma generate",
-    "deploy": "npx prisma generate && npx prisma migrate deploy"
+    "deploy": "npx prisma generate && npx prisma migrate deploy",
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",
@@ -30,10 +31,13 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.0.1",
+    "@types/supertest": "^7.2.1",
     "eslint": "^10.6.0",
     "prisma": "^6.19.0",
+    "supertest": "^7.2.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.62.1"
+    "typescript-eslint": "^8.62.1",
+    "vitest": "^5.0.0"
   }
 }
