@@ -40,3 +40,72 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
+
+  pruebas:
+    name: Pruebas unitarias y cobertura
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npx vitest run --coverage
+
+  e2e:
+    name: Pruebas E2E
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: adminsa
+          POSTGRES_DB: taskmanager
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://admin:adminsa@localhost:5432/taskmanager?schema=public
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      VITE_API_URL: http://localhost:1234
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+      - name: Instalar backend y migrar la base de datos
+        working-directory: ./backend
+        run: |
+          npm ci
+          npx prisma migrate deploy
+      - name: Levantar el backend en segundo plano
+        working-directory: ./backend
+        run: npm run dev &
+      - name: Esperar a que el backend responda
+        run: |
+          for i in {1..30}; do
+            curl -sf http://localhost:1234 && break
+            sleep 2
+          done
+      - name: Instalar frontend y navegadores de Playwright
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Correr pruebas E2E
+        working-directory: ./frontend
+        run: npx playwright test
