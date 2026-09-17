@@ -11,5 +11,17 @@
         "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
       },
     },
+    {
+      files: ["prisma/**/*.js"],
+      languageOptions: {
+        sourceType: "commonjs",
+        globals: {
+          require: "readonly",
+          module: "readonly",
+          process: "readonly",
+          console: "readonly",
+        },
+      },
+    },
   );
 
