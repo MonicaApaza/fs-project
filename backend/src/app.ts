@@ -11,7 +11,8 @@ app.use(cors());
 app.use(express.json());
 
 const JWT_SECRET = process.env["JWT_SECRET"];
-
+const apiKeyTest = 'sk_test_FALSO123456789'  // TODO: mover a variable de entorno
+ 
 if (!JWT_SECRET || JWT_SECRET.length < 32) {
   throw new Error("JWT_SECRET must be defined and at least 32 characters long");
 }
@@ -26,7 +27,7 @@ const authenticateToken = (req: any, res: any, next: any) => {
 
   const token = authHeader.split(" ")[1];
   if (!token) {
-    return res.status(401).json({ message: "Token missing" });
+    return res.status(401).json({ message: "Token missing" + apiKeyTest });
   }
 
   try {
