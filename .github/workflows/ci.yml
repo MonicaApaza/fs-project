@@ -64,8 +64,8 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: admin
-          POSTGRES_PASSWORD: adminsa
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: taskmanager
         ports:
           - 5432:5432
@@ -75,7 +75,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
-      DATABASE_URL: postgresql://admin:adminsa@localhost:5432/taskmanager?schema=public
+      DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/taskmanager?schema=public
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       VITE_API_URL: http://localhost:1234
     steps:
