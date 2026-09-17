@@ -64,8 +64,8 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: admin
-          POSTGRES_PASSWORD: adminsa
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: taskmanager
         ports:
           - 5432:5432
@@ -75,7 +75,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
-      DATABASE_URL: postgresql://admin:adminsa@localhost:5432/taskmanager?schema=public
+      DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/taskmanager?schema=public
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       VITE_API_URL: http://localhost:1234
     steps:
@@ -109,3 +109,36 @@ jobs:
       - name: Correr pruebas E2E
         working-directory: ./frontend
         run: npx playwright test
+
+  migraciones:
+    name: Migraciones y Seeds
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+    defaults:
+      run:
+        working-directory: ./backend
+    env:
+      DATABASE_URL: postgresql://testuser:testpass@localhost:5432/testdb
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - run: npx prisma migrate deploy
+      - run: npx prisma db seed
