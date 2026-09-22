@@ -5,9 +5,11 @@ import type { Task } from "./TaskUtil";
 import { TaskInput } from "./components/TaskInput";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
+import TaskFilters, { type TaskFilter } from "./components/TaskFilters";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [activeFilter, setActiveFilter] = useState<TaskFilter>("all");
   const [token, setToken] = useState(() => localStorage.getItem("token") || "");
   const serviceUrl = `${import.meta.env.VITE_API_URL}/tasks`;
 
@@ -110,12 +112,22 @@ function App() {
     }
   };
 
+  const visibleTasks = tasks.filter((task) => {
+    if (activeFilter === "completed") return task.completed;
+    if (activeFilter === "pending") return !task.completed;
+    return true;
+  });
+
   return (
     <div className="app-container">
       <Header onLogout={handleLogout} />
       <TaskInput onAddTask={addTask} />
+      <TaskFilters
+        activeFilter={activeFilter}
+        onFilterChange={setActiveFilter}
+      />
       <TaskList
-        tasks={tasks}
+        tasks={visibleTasks}
         onRemoveTask={removeTask}
         onMarkCompleted={markCompleted}
       />
