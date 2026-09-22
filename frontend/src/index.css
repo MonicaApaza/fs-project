@@ -103,6 +103,33 @@ li:hover {
   margin-bottom: 16px;
 }
 
+.task-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filter-btn {
+  padding: 7px 12px;
+  font-size: 13px;
+  color: #657286;
+  background-color: #f8f9fb;
+  border: 1px solid #e2e6ea;
+  border-radius: 8px;
+}
+
+.filter-btn:hover {
+  color: #0f766e;
+  background-color: #f0fdfa;
+}
+
+.filter-btn.active,
+.filter-btn.active:hover {
+  color: #fff;
+  background-color: #0d9488;
+  border-color: #0d9488;
+}
+
 input[type="text"] {
   flex: 1;
   padding: 10px 14px;
